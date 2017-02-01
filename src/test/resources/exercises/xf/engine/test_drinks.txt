@@ -3,5 +3,5 @@ Mead,25.0,Polish
 Wódka,30.0,Polish
 Tequila,30.0,Mexican
 Wine,20.0,Italian
-Water,30.0,Italian
-Juice,3.5,Italian
+Water,30.0
+Juice,3.5

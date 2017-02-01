@@ -16,26 +16,30 @@ public class DataLoader {
     public Map<SupplyType, List<Supply>> loadSupplies(Map<SupplyType, File> supplyFiles) throws IOException {
 
         Map<SupplyType, List<Supply>> supplies = new HashMap<>();
-        final int numberOfFields = 3;
         for (SupplyType type: supplyFiles.keySet()) {
-            supplies.put(type, loadSupplyType(type, getClass().getClassLoader().getResourceAsStream(supplyFiles.get(type).getPath()), numberOfFields));
+            supplies.put(type,
+                    loadSupplyType(
+                            type,
+                            getClass().getClassLoader()
+                                    .getResourceAsStream(supplyFiles.get(type).getPath())));
         }
 
         return supplies;
     }
 
-    private List<Supply> loadSupplyType(SupplyType type, InputStream inputStream, int numberOfFields) throws IOException {
+    private List<Supply> loadSupplyType(SupplyType type, InputStream inputStream) throws IOException {
 
         List<Supply> supplyList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
-                if (fields.length != numberOfFields) {
+                if (fields.length < type.getMandatoryNumberOfFields() ||
+                        fields.length > type.getNumberOfFields()) {
                     continue;
                 }
 
-                supplyList.add(SupplyFactory.getNewSupply(type, fields[0], Double.parseDouble(fields[1]), new Cuisine(fields[2])));
+                supplyList.add(SupplyFactory.parseNewSupply(type, fields));
             }
         }
 

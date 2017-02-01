@@ -92,8 +92,8 @@ public class DataLoaderTest {
                 SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", 30.0, polishCuisine),
                 SupplyFactory.getNewSupply(SupplyType.DRINK, "Tequila", 30.0, mexicanCuisine),
                 SupplyFactory.getNewSupply(SupplyType.DRINK, "Wine", 20.0, italianCuisine),
-                SupplyFactory.getNewSupply(SupplyType.DRINK, "Water", 30.0, italianCuisine),
-                SupplyFactory.getNewSupply(SupplyType.DRINK, "Juice", 3.5, italianCuisine)
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Water", 30.0, null),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Juice", 3.5, null)
         );
     }
 }

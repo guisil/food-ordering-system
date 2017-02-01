@@ -19,4 +19,12 @@ public class SupplyFactory {
 
         throw new IllegalArgumentException("Illegal supply type.");
     }
+
+    public static Supply parseNewSupply(SupplyType type, String[] fields) {
+        return getNewSupply(
+                type,
+                fields[0],
+                Double.parseDouble(fields[1]),
+                fields.length == 3 ? new Cuisine(fields[2]) : null);
+    }
 }
