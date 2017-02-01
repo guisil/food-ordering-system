@@ -28,4 +28,10 @@ public class CuisineTest {
         assertThat(cuisine1.hashCode()).as("Checking hashCode for the same object").isEqualTo(cuisine1.hashCode());
         assertThat(cuisine1.hashCode()).as("Checking hashCode for equal objects").isEqualTo(cuisine2.hashCode());
     }
+
+    @Test
+    public void shouldFailWhenNameIsMissing() throws Exception {
+        Throwable thrown = catchThrowable(() -> new Cuisine(null));
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class).hasMessage("Empty name.");
+    }
 }

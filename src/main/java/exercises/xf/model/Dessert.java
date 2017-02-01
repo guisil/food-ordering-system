@@ -3,11 +3,16 @@ package exercises.xf.model;
 /**
  * Created by guisil on 31/01/2017.
  */
-public class Dessert extends Food {
+public class Dessert extends Supply {
 
     Dessert(String name, double price, Cuisine cuisine) {
         super(name, price, cuisine);
+
+        if (cuisine == null) {
+            throw new IllegalArgumentException("Invalid cuisine.");
+        }
     }
+
 
     @Override
     public boolean equals(Object obj) {

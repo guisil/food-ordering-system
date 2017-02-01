@@ -1,36 +1,45 @@
 package exercises.xf.model;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by guisil on 31/01/2017.
  */
 public class Meal implements PricedItem {
 
-    private final MainCourse mainCourse;
-    private final Dessert dessert;
+    private final Supply mainCourse;
+    private final Supply dessert;
 
-    Meal(MainCourse mainCourse, Dessert dessert) {
+    public Meal(Supply mainCourse, Supply dessert) {
+
+        if (mainCourse == null && dessert == null) {
+            throw new IllegalArgumentException("Empty meal.");
+        }
+
         this.mainCourse = mainCourse;
         this.dessert = dessert;
     }
 
+
     @Override
     public String getName() {
-        return mainCourse.getName() + " + " + dessert.getName();
+        return getMainCourse().map(Supply::getName).orElse("No Main Course") +
+                " + " + getDessert().map(Supply::getName).orElse("No Dessert");
     }
 
     @Override
     public double getPrice() {
-        return mainCourse.getPrice() + dessert.getPrice();
+        return getMainCourse().map(Supply::getPrice).orElse(0.0) +
+                getDessert().map(Supply::getPrice).orElse(0.0);
     }
 
-    MainCourse getMainCourse() {
-        return mainCourse;
+    Optional<Supply> getMainCourse() {
+        return Optional.ofNullable(mainCourse);
     }
 
-    Dessert getDessert() {
-        return dessert;
+    Optional<Supply> getDessert() {
+        return Optional.ofNullable(dessert);
     }
 
 
@@ -54,6 +63,8 @@ public class Meal implements PricedItem {
 
     @Override
     public String toString() {
-        return "Meal(" + mainCourse + ", " + dessert + ")";
+        return "Meal(" +
+                "Main Course: " + getMainCourse().map(Supply::toString).orElse("No Main Course") +
+                ", Dessert: " + getDessert().map(Supply::toString).orElse("No Dessert") + ")";
     }
 }

@@ -1,6 +1,9 @@
 package exercises.xf.model;
 
 import org.junit.Test;
+
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.util.Lists.*;
 
@@ -12,17 +15,17 @@ public class OrderTest {
     private static final Cuisine cuisine1 = new Cuisine("Polish");
     private static final Cuisine cuisine2 = new Cuisine("Portuguese");
 
-    private static final MainCourse mainCourse1 = new MainCourse("Bigos", 30.0, cuisine1);
-    private static final MainCourse mainCourse2 = new MainCourse("Bacalhau", 25.0, cuisine2);
+    private static final Supply mainCourse1 = new MainCourse("Bigos", 30.0, cuisine1);
+    private static final Supply mainCourse2 = new MainCourse("Bacalhau", 25.0, cuisine2);
 
-    private static final Dessert dessert1 = new Dessert("Sernik", 10.0, cuisine1);
-    private static final Dessert dessert2 = new Dessert("Pastel de Nata", 11.5, cuisine2);
+    private static final Supply dessert1 = new Dessert("Sernik", 10.0, cuisine1);
+    private static final Supply dessert2 = new Dessert("Pastel de Nata", 11.5, cuisine2);
 
     private static final Meal meal1 = new Meal(mainCourse1, dessert1);
     private static final Meal meal2 = new Meal(mainCourse2, dessert2);
 
-    private static final Drink drink1 = new Drink("Beer", 5.0);
-    private static final Drink drink2 = new Drink("Wine", 20.0);
+    private static final Drink drink1 = new Drink("Beer", 5.0, cuisine1);
+    private static final Drink drink2 = new Drink("Wine", 20.0, cuisine2);
 
     private static final Order order1 = new Order(newArrayList(meal1, drink1));
     private static final Order order2 = new Order(newArrayList(meal1, drink1));
@@ -45,5 +48,33 @@ public class OrderTest {
     public void testHashCode() throws Exception {
         assertThat(order1.hashCode()).as("Checking hashCode for the same object").isEqualTo(order1.hashCode());
         assertThat(order1.hashCode()).as("Checking hashCode for equal objects").isEqualTo(order2.hashCode());
+    }
+
+    @Test
+    public void shouldGetNewOrder() throws Exception {
+        List<PricedItem> expectedMeals = newArrayList(
+                new Meal(
+                        SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pierogi", 14.0, new Cuisine("Polish")),
+                        SupplyFactory.getNewSupply(SupplyType.DESSERT, "Churros", 9.0, new Cuisine("Mexican"))),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", 30.0, new Cuisine("Polish")),
+                new Meal(
+                        SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Burrito", 20.3, new Cuisine("Mexican")),
+                        SupplyFactory.getNewSupply(SupplyType.DESSERT, "Panna Cotta", 8.0, new Cuisine("Italian"))),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", 30.0, new Cuisine("Polish"))
+        );
+        Order created = new Order(expectedMeals);
+        assertThat(created.getItems()).as("Checking factory creation of an order").isEqualTo(expectedMeals);
+    }
+
+    @Test
+    public void shouldFailWithNullListOfItems() throws Exception {
+        Throwable thrown = catchThrowable(() -> new Order(null));
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class).hasMessage("Empty order.");
+    }
+
+    @Test
+    public void shouldFailWithEmptyListOfItems() throws Exception {
+        Throwable thrown = catchThrowable(() -> new Order(newArrayList()));
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class).hasMessage("Empty order.");
     }
 }

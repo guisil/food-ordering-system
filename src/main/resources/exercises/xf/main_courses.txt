@@ -1,0 +1,13 @@
+Barszcz,10.0,Polish
+Bigos,29.99,Polish
+Pierogi,14.0,Polish
+Placki Ziemniaczane,20.5,Polish
+
+Burrito,20.3,Mexican
+Enchilada,30.5,Mexican
+Tacos,24.4,Mexican
+
+Lasagna,22.0,Italian
+Minestrone,10.0,Italian
+Pasta al Pesto,15.0,Italian
+Pizza Margherita,12.5,Italian

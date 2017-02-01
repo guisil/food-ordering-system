@@ -1,5 +1,6 @@
 package exercises.xf.model;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -11,12 +12,17 @@ public class Order {
 
     private final List<PricedItem> items;
 
-    Order(List<PricedItem> items) {
+    public Order(List<PricedItem> items) {
+
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("Empty order.");
+        }
+
         this.items = items;
     }
 
-    List<PricedItem> getItems() {
-        return items;
+    public List<PricedItem> getItems() {
+        return Collections.unmodifiableList(items);
     }
 
 

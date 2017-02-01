@@ -1,18 +1,23 @@
 package exercises.xf.model;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by guisil on 31/01/2017.
  */
-public abstract class Food implements PricedItem {
+public abstract class Supply implements PricedItem {
 
     private final String name;
     private final double price;
-
     private final Cuisine cuisine;
 
-    Food(String name, double price, Cuisine cuisine) {
+    protected Supply(String name, double price, Cuisine cuisine) {
+
+        if (name == null) {
+            throw new IllegalArgumentException("Illegal supply name.");
+        }
+
         this.name = name;
         this.price = price;
         this.cuisine = cuisine;
@@ -28,8 +33,8 @@ public abstract class Food implements PricedItem {
         return price;
     }
 
-    Cuisine getCuisine() {
-        return cuisine;
+    Optional<Cuisine> getCuisine() {
+        return Optional.ofNullable(cuisine);
     }
 
 
@@ -38,10 +43,10 @@ public abstract class Food implements PricedItem {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof Food)) {
+        if (!(obj instanceof Supply)) {
             return false;
         }
-        Food other = (Food) obj;
+        Supply other = (Supply) obj;
         return Objects.equals(other.name, name)
                 && other.price == price
                 && Objects.equals(other.cuisine, cuisine);
@@ -54,6 +59,7 @@ public abstract class Food implements PricedItem {
 
     @Override
     public String toString() {
-        return "Name: " + name + ", Price: " + price + ", Cuisine: " + cuisine;
+        return "Name: " + name + ", Price: " + price +
+                ", Cuisine: " + getCuisine().map(Cuisine::toString).orElse("No Cuisine");
     }
 }

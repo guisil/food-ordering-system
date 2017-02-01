@@ -9,7 +9,12 @@ public class Cuisine {
 
     private final String name;
 
-    Cuisine(String name) {
+    public Cuisine(String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException("Empty name.");
+        }
+
         this.name = name;
     }
 

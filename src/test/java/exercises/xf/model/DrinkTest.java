@@ -8,10 +8,10 @@ import static org.assertj.core.api.Assertions.*;
  */
 public class DrinkTest {
 
-    private static final Drink drink1 = new Drink("Beer", 5.0);
-    private static final Drink drink2 = new Drink("Beer", 5.0);
-    private static final Drink drink3 = new Drink("Beer", 5.0);
-    private static final Drink drink4 = new Drink("Wine", 20.0);
+    private static final Drink drink1 = new Drink("Beer", 5.0, new Cuisine("Polish"));
+    private static final Drink drink2 = new Drink("Beer", 5.0, new Cuisine("Polish"));
+    private static final Drink drink3 = new Drink("Beer", 5.0, new Cuisine("Polish"));
+    private static final Drink drink4 = new Drink("Wine", 20.0, new Cuisine("Portuguese"));
 
     @Test
     public void testEquals() throws Exception {

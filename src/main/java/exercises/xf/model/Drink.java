@@ -5,26 +5,11 @@ import java.util.Objects;
 /**
  * Created by guisil on 31/01/2017.
  */
-public class Drink implements PricedItem {
+public class Drink extends Supply {
 
-    private final String name;
-    private final double price;
-
-    Drink(String name, double price) {
-        this.name = name;
-        this.price = price;
+    Drink(String name, double price, Cuisine cuisine) {
+        super(name, price, cuisine);
     }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public double getPrice() {
-        return price;
-    }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -34,18 +19,19 @@ public class Drink implements PricedItem {
         if (!(obj instanceof Drink)) {
             return false;
         }
-        Drink other = (Drink) obj;
-        return Objects.equals(other.name, name)
-                && other.price == price;
+        if (!super.equals(obj)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, price);
+        return super.hashCode();
     }
 
     @Override
     public String toString() {
-        return "Drink(Name: " + name + ", Price: " + price + ")";
+        return "Drink(" + super.toString() + ")";
     }
 }

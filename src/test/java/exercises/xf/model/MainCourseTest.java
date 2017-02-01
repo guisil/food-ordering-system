@@ -32,4 +32,10 @@ public class MainCourseTest {
         assertThat(mainCourse1.hashCode()).as("Checking hashCode for the same object").isEqualTo(mainCourse1.hashCode());
         assertThat(mainCourse1.hashCode()).as("Checking hashCode for equal objects").isEqualTo(mainCourse2.hashCode());
     }
+
+    @Test
+    public void shouldFailWhenCuisineIsMissing() throws Exception {
+        Throwable thrown = catchThrowable(() -> new MainCourse("Bigos", 29.99, null));
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class).hasMessage("Invalid cuisine.");
+    }
 }

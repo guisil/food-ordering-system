@@ -3,10 +3,14 @@ package exercises.xf.model;
 /**
  * Created by guisil on 31/01/2017.
  */
-public class MainCourse extends Food {
+public class MainCourse extends Supply {
 
     MainCourse(String name, double price, Cuisine cuisine) {
         super(name, price, cuisine);
+
+        if (cuisine == null) {
+            throw new IllegalArgumentException("Invalid cuisine.");
+        }
     }
 
 
