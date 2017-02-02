@@ -42,7 +42,7 @@ public class SupplyFactoryTest {
     public void shouldThrowExceptionForIllegalType() throws Exception {
         final Cuisine cuisine1 = new Cuisine("Polish");
         Throwable thrown = catchThrowable(() -> SupplyFactory.getNewSupply(null, "Bigos", new BigDecimal("30.0"), cuisine1));
-        assertThat(thrown).isInstanceOf(IllegalArgumentException.class).hasMessage("Illegal supply type.");
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class).hasMessage("Invalid supply type.");
     }
 
     @Test
