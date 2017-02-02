@@ -24,6 +24,7 @@ public abstract class Supply implements PricedItem {
         this.cuisine = cuisine;
     }
 
+
     @Override
     public String getName() {
         return name;
@@ -60,7 +61,6 @@ public abstract class Supply implements PricedItem {
 
     @Override
     public String toString() {
-        return "Name: " + name + ", Price: " + price +
-                ", Cuisine: " + getCuisine().map(Cuisine::toString).orElse("No Cuisine");
+        return name + " (" + price + " PLN)";
     }
 }

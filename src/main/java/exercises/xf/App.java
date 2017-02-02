@@ -17,9 +17,8 @@ public class App {
 
         DataLoader loader = new DataLoader();
 
-        System.out.println("Welcome to the Supply Ordering System!");
-        System.out.println("");
-        System.out.println("Loading data...");
+        System.out.print("\nWelcome to the Food Ordering System!\n\n");
+        System.out.print("Loading data...\n\n");
 
         Menu menu;
 
@@ -32,7 +31,7 @@ public class App {
             menu = loader.loadMenu(supplyFiles);
 
         } catch (IOException e) {
-            System.err.println("Error loading data.");
+            System.err.print("Error loading data.\n\n");
             e.printStackTrace();
             return;
         }
@@ -41,14 +40,14 @@ public class App {
         Optional<Order> order = orderFiller.getOrderFromInput(System.in);
 
         order.ifPresent(o -> {
-            System.out.println("Thank you for your visit. Your order:");
-            o.getItems().forEach(System.out::println);
-            System.out.println("Total price: " + o.getPrice());
+            System.out.print("\n\nThank you for your visit. Your order:\n\n");
+            System.out.print(o);
+            System.out.print("\n\nTotal price: " + o.getPrice() + " PLN\n");
             System.out.print("\n\nSmacznego!\n\n");
         });
 
         if (!order.isPresent()) {
-            System.out.println("Nothing to your liking? Try again tomorrow!");
+            System.out.print("\n\nNothing to your liking? Try again tomorrow!\n\n");
         }
     }
 }

@@ -17,6 +17,12 @@ public class Dessert extends Supply {
 
 
     @Override
+    public String getDescription() {
+        return SupplyType.DESSERT.getDescription();
+    }
+
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
@@ -37,6 +43,6 @@ public class Dessert extends Supply {
 
     @Override
     public String toString() {
-        return "Dessert(" + super.toString() + ")";
+        return super.toString();
     }
 }

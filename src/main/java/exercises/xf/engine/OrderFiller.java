@@ -23,24 +23,20 @@ public class OrderFiller {
     public Optional<Order> getOrderFromInput(InputStream inputStream) {
 
         List<PricedItem> choices = new ArrayList<>();
-        Cuisine currentCuisine = new Cuisine("None");
 
         boolean cliActive = true;
 
         try (Scanner scanner = new Scanner(inputStream).useDelimiter("\n")) {
             while(cliActive) {
 
-                Optional<Cuisine> newCuisine = getCuisineFromInput(scanner);
-                if (newCuisine.isPresent()) {
-                    currentCuisine = newCuisine.get();
-                }
+                Cuisine currentCuisine = getCuisineFromInput(scanner).get();
 
                 getMealFromInput(scanner, currentCuisine).ifPresent(choices::add);
                 getDrinkFromInput(scanner, currentCuisine).ifPresent(choices::add);
 
                 String answer;
                 do {
-                    System.out.println("Would you like to order something else? (y/n)");
+                    System.out.print("\nWould you like to order something else? (y/n): ");
                     answer = scanner.next();
                 } while (!"y".equalsIgnoreCase(answer) && !"n".equalsIgnoreCase(answer));
 
@@ -62,20 +58,16 @@ public class OrderFiller {
 
         List<Cuisine> cuisines = menu.getCuisines();
 
-        System.out.println("AVAILABLE CUISINES AND STUFF...");
+        System.out.print("Available Cuisines:\n\n");
         IntStream.range(0, cuisines.size()).forEach(i -> System.out.println((i + 1) + " - " + cuisines.get(i)));
 
-        int selection = getValidSelection(scanner, cuisines.size());
-        if (selection > 0 && selection <= cuisines.size()) {
-            return Optional.of(cuisines.get(selection - 1));
-        } else {
-            return Optional.empty();
-        }
+        int selection = getValidSelection(scanner, cuisines.size(), 1);
+        return Optional.of(cuisines.get(selection - 1));
     }
 
     private Optional<PricedItem> getMealFromInput(Scanner scanner, Cuisine selectedCuisine) {
-        Optional<Supply> chosenMainCourse = getSupplyFromInput(scanner, menu.getSupplies().get(SupplyType.MAIN_COURSE), selectedCuisine);
-        Optional<Supply> chosenDessert = getSupplyFromInput(scanner, menu.getSupplies().get(SupplyType.DESSERT), selectedCuisine);
+        Optional<Supply> chosenMainCourse = getSupplyFromInput(scanner, SupplyType.MAIN_COURSE, menu.getSupplies().get(SupplyType.MAIN_COURSE), selectedCuisine);
+        Optional<Supply> chosenDessert = getSupplyFromInput(scanner, SupplyType.DESSERT, menu.getSupplies().get(SupplyType.DESSERT), selectedCuisine);
         try {
             return Optional.of(new Meal(chosenMainCourse.orElse(null), chosenDessert.orElse(null)));
         } catch (IllegalArgumentException ex) {
@@ -84,10 +76,12 @@ public class OrderFiller {
     }
 
     private Optional<Supply> getDrinkFromInput(Scanner scanner, Cuisine selectedCuisine) {
-        return getSupplyFromInput(scanner, menu.getSupplies().get(SupplyType.DRINK), selectedCuisine);
+        return getSupplyFromInput(scanner, SupplyType.DRINK, menu.getSupplies().get(SupplyType.DRINK), selectedCuisine);
     }
 
-    private Optional<Supply> getSupplyFromInput(Scanner scanner, List<Supply> orderItemList, Cuisine selectedCuisine) {
+    private Optional<Supply> getSupplyFromInput(Scanner scanner, SupplyType type, List<Supply> orderItemList, Cuisine selectedCuisine) {
+
+        System.out.print("\nAvailable " + type.getPluralDescription() + " from "+ selectedCuisine + " cuisine:\n\n");
 
         System.out.println("0 - None");
         List<Supply> cuisineSupply = orderItemList.stream()
@@ -96,7 +90,7 @@ public class OrderFiller {
                 .collect(Collectors.toList());
         IntStream.range(0, cuisineSupply.size()).forEach(i -> System.out.println((i + 1) + " - " + cuisineSupply.get(i)));
 
-        int selection = getValidSelection(scanner, cuisineSupply.size());
+        int selection = getValidSelection(scanner, cuisineSupply.size(), 0);
         if (selection > 0 && selection <= cuisineSupply.size()) {
             return Optional.of(cuisineSupply.get(selection - 1));
         } else {
@@ -104,14 +98,14 @@ public class OrderFiller {
         }
     }
 
-    private int getValidSelection(Scanner scanner, int listSize) {
+    private int getValidSelection(Scanner scanner, int listSize, int minSelection) {
         int selection = -1;
-        while(selection < 0 || selection > listSize) {
-            System.out.println("Please type a number between 0 and " + listSize);
+        while(selection < minSelection || selection > listSize) {
+            System.out.print("\nPlease make your selection by typing a number between " + minSelection + " and " + listSize + ": ");
             try {
                 selection = scanner.nextInt();
             } catch(InputMismatchException ex) {
-                System.out.println("Illegal selection: " + scanner.next() + ". Please select one of the available items.");
+                System.out.print("\n\nInvalid selection: " + scanner.next() + ". Please select one of the available items.\n\n");
             }
         }
         return selection;

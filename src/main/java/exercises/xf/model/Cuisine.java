@@ -43,6 +43,6 @@ public class Cuisine {
 
     @Override
     public String toString() {
-        return "Cuisine(Name: " + name + ")";
+        return name;
     }
 }

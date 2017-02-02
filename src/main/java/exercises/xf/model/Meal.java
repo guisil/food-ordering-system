@@ -30,6 +30,11 @@ public class Meal implements PricedItem {
     }
 
     @Override
+    public String getDescription() {
+        return "Meal";
+    }
+
+    @Override
     public BigDecimal getPrice() {
         return getMainCourse().map(Supply::getPrice).orElse(BigDecimal.ZERO).add(
                 getDessert().map(Supply::getPrice).orElse(BigDecimal.ZERO));
@@ -64,8 +69,7 @@ public class Meal implements PricedItem {
 
     @Override
     public String toString() {
-        return "Meal(" +
-                "Main Course: " + getMainCourse().map(Supply::toString).orElse("No Main Course") +
-                ", Dessert: " + getDessert().map(Supply::toString).orElse("No Dessert") + ")";
+        return SupplyType.MAIN_COURSE.getDescription() + ": " + getMainCourse().map(Supply::toString).orElse("No Main Course") +
+                ", " + SupplyType.DESSERT.getDescription() + ": " + getDessert().map(Supply::toString).orElse("No Dessert");
     }
 }

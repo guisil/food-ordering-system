@@ -8,5 +8,6 @@ import java.math.BigDecimal;
 public interface PricedItem {
 
     String getName();
+    String getDescription();
     BigDecimal getPrice();
 }

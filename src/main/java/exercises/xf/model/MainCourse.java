@@ -17,6 +17,12 @@ public class MainCourse extends Supply {
 
 
     @Override
+    public String getDescription() {
+        return SupplyType.MAIN_COURSE.getDescription();
+    }
+
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
@@ -37,6 +43,6 @@ public class MainCourse extends Supply {
 
     @Override
     public String toString() {
-        return "MainCourse(" + super.toString() + ")";
+        return super.toString();
     }
 }

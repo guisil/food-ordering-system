@@ -26,6 +26,7 @@ public class Order {
         price = items.stream().map(PricedItem::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+
     public List<PricedItem> getItems() {
         return Collections.unmodifiableList(items);
     }
@@ -54,6 +55,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return items.stream().map(Object::toString).collect(Collectors.joining("\n"));
+        return items.stream().map(item -> item.getDescription() + ": " + item.toString())
+                .collect(Collectors.joining("\n"));
     }
 }

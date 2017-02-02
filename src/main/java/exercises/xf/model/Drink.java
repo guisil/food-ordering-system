@@ -11,6 +11,13 @@ public class Drink extends Supply {
         super(name, price, cuisine);
     }
 
+
+    @Override
+    public String getDescription() {
+        return SupplyType.DRINK.getDescription();
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -32,6 +39,6 @@ public class Drink extends Supply {
 
     @Override
     public String toString() {
-        return "Drink(" + super.toString() + ")";
+        return super.toString();
     }
 }
