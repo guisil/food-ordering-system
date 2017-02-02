@@ -7,6 +7,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
+ * Class representing an order.
+ *
  * Created by guisil on 31/01/2017.
  */
 public class Order {
@@ -15,7 +17,12 @@ public class Order {
 
     private final BigDecimal price;
 
-    public Order(List<PricedItem> items) {
+    /**
+     * Constructs an order.
+     * @param items list of items that constitute the order
+     * @throws IllegalArgumentException if the list of items is null or empty
+     */
+    public Order(List<PricedItem> items) throws IllegalArgumentException {
 
         if (items == null || items.isEmpty()) {
             throw new IllegalArgumentException("Empty order.");
@@ -27,15 +34,26 @@ public class Order {
     }
 
 
-    public List<PricedItem> getItems() {
+    /**
+     * Returns the list of items included in the order.
+     * @return list of items included in the order
+     */
+    List<PricedItem> getItems() {
         return Collections.unmodifiableList(items);
     }
 
+    /**
+     * Returns the total price of the order.
+     * @return total price of the order
+     */
     public BigDecimal getPrice() {
         return price;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -48,11 +66,17 @@ public class Order {
         return Objects.equals(other.items, items);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Objects.hash(items);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return items.stream().map(item -> item.getDescription() + ": " + item.toString())

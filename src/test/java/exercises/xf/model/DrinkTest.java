@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.*;
 
 /**
+ * Test class for Drink.
+ *
  * Created by guisil on 31/01/2017.
  */
 public class DrinkTest {

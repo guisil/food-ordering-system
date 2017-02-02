@@ -8,6 +8,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.util.Arrays.*;
 
 /**
+ * Test class for SupplyFactory.
+ *
  * Created by guisil on 01/02/2017.
  */
 public class SupplyFactoryTest {

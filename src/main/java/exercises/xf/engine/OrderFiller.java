@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
+ * Class responsible for filling the order.
+ *
  * Created by guisil on 31/01/2017.
  */
 public class OrderFiller {
@@ -15,11 +17,20 @@ public class OrderFiller {
     private final Menu menu;
 
 
+    /**
+     * Constructs an order filler.
+     * @param menu menu to be used in the order filling process
+     */
     public OrderFiller(Menu menu) {
         this.menu = menu;
     }
 
 
+    /**
+     * Presents the choices to the user and creates an order based on the user's input.
+     * @param inputStream stream to read the input from
+     * @return optional containing the order
+     */
     public Optional<Order> getOrderFromInput(InputStream inputStream) {
 
         List<PricedItem> choices = new ArrayList<>();

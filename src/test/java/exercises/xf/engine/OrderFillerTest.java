@@ -14,6 +14,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.util.Lists.*;
 
 /**
+ * Test class for OrderFiller.
+ *
  * Created by guisil on 31/01/2017.
  */
 public class OrderFillerTest {

@@ -3,10 +3,15 @@ package exercises.xf.model;
 import java.util.Comparator;
 
 /**
+ * Class with utilities related with supplies.
+ *
  * Created by guisil on 02/02/2017.
  */
 public class SupplyUtil {
 
+    /**
+     * Comparator to be used when sorting supplies.
+     */
     public static final Comparator<Supply> supplyComparator = (s1, s2) -> {
         if (!s1.getCuisine().isPresent() && !s2.getCuisine().isPresent()) {
             return s1.getName().compareTo(s2.getName());

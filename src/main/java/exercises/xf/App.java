@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.*;
 
 /**
+ * Main class of the application.
+ *
  * Created by guisil on 31/01/2017.
  */
 public class App {
