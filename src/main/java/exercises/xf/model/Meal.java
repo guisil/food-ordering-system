@@ -1,5 +1,6 @@
 package exercises.xf.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -29,9 +30,9 @@ public class Meal implements PricedItem {
     }
 
     @Override
-    public double getPrice() {
-        return getMainCourse().map(Supply::getPrice).orElse(0.0) +
-                getDessert().map(Supply::getPrice).orElse(0.0);
+    public BigDecimal getPrice() {
+        return getMainCourse().map(Supply::getPrice).orElse(BigDecimal.ZERO).add(
+                getDessert().map(Supply::getPrice).orElse(BigDecimal.ZERO));
     }
 
     Optional<Supply> getMainCourse() {

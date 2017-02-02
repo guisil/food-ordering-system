@@ -1,6 +1,9 @@
 package exercises.xf.model;
 
 import org.junit.Test;
+
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.*;
 
 /**
@@ -10,11 +13,11 @@ public class MainCourseTest {
 
     private static final Cuisine cuisine1 = new Cuisine("Polish");
     private static final Cuisine cuisine2 = new Cuisine("Portuguese");
-    private static final MainCourse mainCourse1 = new MainCourse("Bigos", 30.0, cuisine1);
-    private static final MainCourse mainCourse2 = new MainCourse("Bigos", 30.0, cuisine1);
-    private static final MainCourse mainCourse3 = new MainCourse("Bigos", 30.0, cuisine1);
-    private static final MainCourse mainCourse4 = new MainCourse("Pierogi", 15.0, cuisine1);
-    private static final MainCourse mainCourse5 = new MainCourse("Bacalhau", 25.0, cuisine2);
+    private static final MainCourse mainCourse1 = new MainCourse("Bigos", new BigDecimal("30.0"), cuisine1);
+    private static final MainCourse mainCourse2 = new MainCourse("Bigos", new BigDecimal("30.0"), cuisine1);
+    private static final MainCourse mainCourse3 = new MainCourse("Bigos", new BigDecimal("30.0"), cuisine1);
+    private static final MainCourse mainCourse4 = new MainCourse("Pierogi", new BigDecimal("15.0"), cuisine1);
+    private static final MainCourse mainCourse5 = new MainCourse("Bacalhau", new BigDecimal("25.0"), cuisine2);
 
     @Test
     public void testEquals() throws Exception {
@@ -35,7 +38,7 @@ public class MainCourseTest {
 
     @Test
     public void shouldFailWhenCuisineIsMissing() throws Exception {
-        Throwable thrown = catchThrowable(() -> new MainCourse("Bigos", 29.99, null));
+        Throwable thrown = catchThrowable(() -> new MainCourse("Bigos", new BigDecimal("29.99"), null));
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class).hasMessage("Invalid cuisine.");
     }
 }

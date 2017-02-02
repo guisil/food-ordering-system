@@ -1,6 +1,9 @@
 package exercises.xf.model;
 
 import org.junit.Test;
+
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.*;
 
 /**
@@ -8,10 +11,10 @@ import static org.assertj.core.api.Assertions.*;
  */
 public class DrinkTest {
 
-    private static final Drink drink1 = new Drink("Beer", 5.0, new Cuisine("Polish"));
-    private static final Drink drink2 = new Drink("Beer", 5.0, new Cuisine("Polish"));
-    private static final Drink drink3 = new Drink("Beer", 5.0, new Cuisine("Polish"));
-    private static final Drink drink4 = new Drink("Wine", 20.0, new Cuisine("Portuguese"));
+    private static final Drink drink1 = new Drink("Beer", new BigDecimal("5.0"), new Cuisine("Polish"));
+    private static final Drink drink2 = new Drink("Beer", new BigDecimal("5.0"), new Cuisine("Polish"));
+    private static final Drink drink3 = new Drink("Beer", new BigDecimal("5.0"), new Cuisine("Polish"));
+    private static final Drink drink4 = new Drink("Wine", new BigDecimal("20.0"), new Cuisine("Portuguese"));
 
     @Test
     public void testEquals() throws Exception {

@@ -19,7 +19,7 @@ public class Cuisine {
     }
 
 
-    String getName() {
+    public String getName() {
         return name;
     }
 

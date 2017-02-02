@@ -1,8 +1,6 @@
 Naleśniki,12.0,Polish
-Sernik,11.0,Polish
-
 Churros,9.0,Mexican
-Jericalla,10.0,Mexican
-
-Panna Cotta,8.0,Italian
+Sernik,11.0,Polish
 Tiramisù,12.5,Italian
+Jericalla,10.0,Mexican
+Panna Cotta,8.0,Italian

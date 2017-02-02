@@ -1,11 +1,13 @@
 package exercises.xf.model;
 
+import java.math.BigDecimal;
+
 /**
  * Created by guisil on 01/02/2017.
  */
 public class SupplyFactory {
 
-    public static Supply getNewSupply(SupplyType type, String name, double price, Cuisine cuisine) {
+    public static Supply getNewSupply(SupplyType type, String name, BigDecimal price, Cuisine cuisine) {
 
         if (SupplyType.MAIN_COURSE.equals(type)) {
             return new MainCourse(name, price, cuisine);
@@ -24,7 +26,7 @@ public class SupplyFactory {
         return getNewSupply(
                 type,
                 fields[0],
-                Double.parseDouble(fields[1]),
+                new BigDecimal(fields[1]),
                 fields.length == 3 ? new Cuisine(fields[2]) : null);
     }
 }

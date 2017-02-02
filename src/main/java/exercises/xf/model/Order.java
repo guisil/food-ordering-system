@@ -1,5 +1,6 @@
 package exercises.xf.model;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +13,8 @@ public class Order {
 
     private final List<PricedItem> items;
 
+    private final BigDecimal price;
+
     public Order(List<PricedItem> items) {
 
         if (items == null || items.isEmpty()) {
@@ -19,10 +22,16 @@ public class Order {
         }
 
         this.items = items;
+
+        price = items.stream().map(PricedItem::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public List<PricedItem> getItems() {
         return Collections.unmodifiableList(items);
+    }
+
+    public BigDecimal getPrice() {
+        return price;
     }
 
 

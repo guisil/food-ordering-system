@@ -4,6 +4,7 @@ import exercises.xf.model.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,17 +22,18 @@ public class OrderFillerTest {
 
     @Before
     public void setUp() throws Exception {
-        orderFiller = new OrderFiller(supplies());
+        orderFiller = new OrderFiller(menu());
     }
 
     @Test
     public void shouldCreateOrderFromValidInput() throws Exception {
+        Cuisine polishCuisine = new Cuisine("Polish");
         Order expected = new Order(
                 newArrayList(
                         new Meal(
-                                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Bigos", 29.99, new Cuisine("Polish")),
-                                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Tiramisù", 12.5, new Cuisine("Italian"))),
-                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Mead", 25.0, new Cuisine("Polish"))
+                                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Bigos", new BigDecimal("29.99"), polishCuisine),
+                                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Sernik", new BigDecimal("11.0"), polishCuisine)),
+                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Mead", new BigDecimal("25.0"), polishCuisine)
                 )
         );
         Optional<Order> filled = orderFiller
@@ -42,12 +44,13 @@ public class OrderFillerTest {
 
     @Test
     public void shouldCreateOrderWithEmptyItemsWhenNoMainCourseIsSelected() throws Exception {
+        Cuisine mexicanCuisine = new Cuisine("Mexican");
         Order expected = new Order(
                 newArrayList(
                         new Meal(
                                 null,
-                                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Churros", 9.0, new Cuisine("Mexican"))),
-                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", 30.0, new Cuisine("Polish"))
+                                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Churros", new BigDecimal("9.0"), mexicanCuisine)),
+                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Tequila", new BigDecimal("30.0"), mexicanCuisine)
                 )
         );
         Optional<Order> filled = orderFiller
@@ -60,7 +63,7 @@ public class OrderFillerTest {
     public void shouldCreateOrderWithEmptyItemsWhenNoMealIsSelected() throws Exception {
         Order expected = new Order(
                 newArrayList(
-                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", 30.0, new Cuisine("Polish"))
+                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", new BigDecimal("30.0"), new Cuisine("Polish"))
                 )
         );
         Optional<Order> filled = orderFiller
@@ -79,16 +82,18 @@ public class OrderFillerTest {
 
     @Test
     public void shouldCreateOrderFromLongerValidInput() throws Exception {
+        Cuisine polishCuisine = new Cuisine("Polish");
+        Cuisine italianCuisine = new Cuisine("Italian");
         Order expected = new Order(
                 newArrayList(
                         new Meal(
-                                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pierogi", 14.0, new Cuisine("Polish")),
-                                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Churros", 9.0, new Cuisine("Mexican"))),
-                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", 30.0, new Cuisine("Polish")),
+                                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pierogi", new BigDecimal("14.0"), polishCuisine),
+                                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Naleśniki", new BigDecimal("12.0"), polishCuisine)),
+                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", new BigDecimal("30.0"), polishCuisine),
                         new Meal(
-                                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Burrito", 20.3, new Cuisine("Mexican")),
-                                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Panna Cotta", 8.0, new Cuisine("Italian"))),
-                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", 30.0, new Cuisine("Polish"))
+                                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Minestrone", new BigDecimal("10.0"), italianCuisine),
+                                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Panna Cotta", new BigDecimal("8.0"), italianCuisine)),
+                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Juice", new BigDecimal("3.5"), null)
                 )
         );
         Optional<Order> filled = orderFiller
@@ -99,20 +104,33 @@ public class OrderFillerTest {
 
     @Test
     public void shouldSkipInputNotMatchingChoicesUntilValidInput() throws Exception {
+        Cuisine polishCuisine = new Cuisine("Polish");
         Order expected = new Order(
                 newArrayList(
                         new Meal(
-                                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pierogi", 14.0, new Cuisine("Polish")),
-                                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Churros", 9.0, new Cuisine("Mexican"))),
-                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", 30.0, new Cuisine("Polish"))
+                                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pierogi", new BigDecimal("14.0"), polishCuisine),
+                                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Sernik", new BigDecimal("11.0"), polishCuisine)),
+                        SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", new BigDecimal("30.0"), polishCuisine)
                 )
         );
         Optional<Order> filled = orderFiller
                 .getOrderFromInput(getClass().getClassLoader()
-                        .getResourceAsStream("exercises/xf/engine/invalid_simulated_input_2.txt"));
+                        .getResourceAsStream("exercises/xf/engine/invalid_simulated_input_1.txt"));
         assertThat(filled.get()).as("Checking if filled order is as expected, after skipping invalid input").isEqualTo(expected);
     }
 
+
+    private Menu menu() {
+        return new Menu(cuisines(), supplies());
+    }
+
+    private List<Cuisine> cuisines() {
+        return newArrayList(
+                new Cuisine("Italian"),
+                new Cuisine("Mexican"),
+                new Cuisine("Polish")
+        );
+    }
 
     private Map<SupplyType, List<Supply>> supplies() {
         Map<SupplyType, List<Supply>> supplies = new HashMap<>();
@@ -129,19 +147,19 @@ public class OrderFillerTest {
         Cuisine italianCuisine = new Cuisine("Italian");
 
         return newArrayList(
-                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Barszcz", 10.0, polishCuisine),
-                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Bigos", 29.99, polishCuisine),
-                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pierogi", 14.0, polishCuisine),
-                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Placki Ziemniaczane", 20.5, polishCuisine),
+                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Barszcz", new BigDecimal("10.0"), polishCuisine),
+                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Bigos", new BigDecimal("29.99"), polishCuisine),
+                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pierogi", new BigDecimal("14.0"), polishCuisine),
+                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Placki Ziemniaczane", new BigDecimal("20.5"), polishCuisine),
 
-                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Burrito", 20.3, mexicanCuisine),
-                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Enchilada", 30.5, mexicanCuisine),
-                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Tacos", 24.4, mexicanCuisine),
+                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Burrito", new BigDecimal("20.3"), mexicanCuisine),
+                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Enchilada", new BigDecimal("30.5"), mexicanCuisine),
+                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Tacos", new BigDecimal("24.4"), mexicanCuisine),
 
-                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Lasagna", 22.0, italianCuisine),
-                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Minestrone", 10.0, italianCuisine),
-                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pasta al Pesto", 15.0, italianCuisine),
-                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pizza Margherita", 12.5, italianCuisine)
+                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Lasagna", new BigDecimal("22.0"), italianCuisine),
+                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Minestrone", new BigDecimal("10.0"), italianCuisine),
+                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pasta al Pesto", new BigDecimal("15.0"), italianCuisine),
+                SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pizza Margherita", new BigDecimal("12.5"), italianCuisine)
         );
     }
 
@@ -152,14 +170,14 @@ public class OrderFillerTest {
         Cuisine italianCuisine = new Cuisine("Italian");
 
         return newArrayList(
-                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Naleśniki", 12.0, polishCuisine),
-                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Sernik", 11.0, polishCuisine),
+                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Naleśniki", new BigDecimal("12.0"), polishCuisine),
+                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Sernik", new BigDecimal("11.0"), polishCuisine),
 
-                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Churros", 9.0, mexicanCuisine),
-                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Jericalla", 10.0, mexicanCuisine),
+                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Churros", new BigDecimal("9.0"), mexicanCuisine),
+                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Jericalla", new BigDecimal("10.0"), mexicanCuisine),
 
-                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Panna Cotta", 8.0, italianCuisine),
-                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Tiramisù", 12.5, italianCuisine)
+                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Panna Cotta", new BigDecimal("8.0"), italianCuisine),
+                SupplyFactory.getNewSupply(SupplyType.DESSERT, "Tiramisù", new BigDecimal("12.5"), italianCuisine)
         );
     }
 
@@ -170,13 +188,13 @@ public class OrderFillerTest {
         Cuisine italianCuisine = new Cuisine("Italian");
 
         return newArrayList(
-                SupplyFactory.getNewSupply(SupplyType.DRINK, "Beer", 5.0, polishCuisine),
-                SupplyFactory.getNewSupply(SupplyType.DRINK, "Mead", 25.0, polishCuisine),
-                SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", 30.0, polishCuisine),
-                SupplyFactory.getNewSupply(SupplyType.DRINK, "Tequila", 30.0, mexicanCuisine),
-                SupplyFactory.getNewSupply(SupplyType.DRINK, "Wine", 20.0, italianCuisine),
-                SupplyFactory.getNewSupply(SupplyType.DRINK, "Water", 30.0, italianCuisine),
-                SupplyFactory.getNewSupply(SupplyType.DRINK, "Juice", 3.5, italianCuisine)
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Beer", new BigDecimal("5.0"), polishCuisine),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Mead", new BigDecimal("25.0"), polishCuisine),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", new BigDecimal("30.0"), polishCuisine),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Tequila", new BigDecimal("30.0"), mexicanCuisine),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Wine", new BigDecimal("20.0"), italianCuisine),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Water", new BigDecimal("30.0"), null),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Juice", new BigDecimal("3.5"), null)
         );
     }
 }

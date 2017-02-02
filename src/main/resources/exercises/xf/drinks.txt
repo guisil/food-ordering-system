@@ -1,7 +1,7 @@
-Beer,5.0,Polish
-Mead,25.0,Polish
 Wódka,30.0,Polish
 Tequila,30.0,Mexican
-Wine,20.0,Italian
+Beer,5.0,Polish
 Water,30.0
+Wine,20.0,Italian
+Mead,25.0,Polish
 Juice,3.5

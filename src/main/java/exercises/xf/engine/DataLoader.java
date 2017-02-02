@@ -3,17 +3,15 @@ package exercises.xf.engine;
 import exercises.xf.model.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by guisil on 31/01/2017.
  */
 public class DataLoader {
 
-    public Map<SupplyType, List<Supply>> loadSupplies(Map<SupplyType, File> supplyFiles) throws IOException {
+    public Menu loadMenu(Map<SupplyType, File> supplyFiles) throws IOException {
 
         Map<SupplyType, List<Supply>> supplies = new HashMap<>();
         for (SupplyType type: supplyFiles.keySet()) {
@@ -24,7 +22,14 @@ public class DataLoader {
                                     .getResourceAsStream(supplyFiles.get(type).getPath())));
         }
 
-        return supplies;
+        List<Cuisine> cuisines = supplies.values().stream()
+                .flatMap(list -> list.stream()
+                        .filter(supply -> supply.getCuisine().isPresent())
+                        .map(supply -> supply.getCuisine().get()).distinct())
+                .distinct().sorted(Comparator.comparing(Cuisine::getName))
+                .collect(Collectors.toList());
+
+        return new Menu(cuisines, supplies);
     }
 
     private List<Supply> loadSupplyType(SupplyType type, InputStream inputStream) throws IOException {
@@ -43,6 +48,9 @@ public class DataLoader {
             }
         }
 
-        return supplyList;
+        return supplyList
+                .stream()
+                .sorted(SupplyUtil.supplyComparator)
+                .collect(Collectors.toList());
     }
 }

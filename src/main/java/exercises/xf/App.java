@@ -21,7 +21,7 @@ public class App {
         System.out.println("");
         System.out.println("Loading data...");
 
-        Map<SupplyType, List<Supply>> supplies = new HashMap<>();
+        Menu menu;
 
         try {
             Map<SupplyType, File> supplyFiles = new HashMap<>();
@@ -29,7 +29,7 @@ public class App {
             supplyFiles.put(SupplyType.DESSERT, new File("exercises/xf/desserts.txt"));
             supplyFiles.put(SupplyType.DRINK, new File("exercises/xf/drinks.txt"));
 
-            supplies = loader.loadSupplies(supplyFiles);
+            menu = loader.loadMenu(supplyFiles);
 
         } catch (IOException e) {
             System.err.println("Error loading data.");
@@ -37,14 +37,13 @@ public class App {
             return;
         }
 
-        OrderFiller orderFiller = new OrderFiller(supplies);
+        OrderFiller orderFiller = new OrderFiller(menu);
         Optional<Order> order = orderFiller.getOrderFromInput(System.in);
-
 
         order.ifPresent(o -> {
             System.out.println("Thank you for your visit. Your order:");
             o.getItems().forEach(System.out::println);
-            System.out.println("Total price: " + o.getItems().stream().mapToDouble(PricedItem::getPrice).sum());
+            System.out.println("Total price: " + o.getPrice());
             System.out.print("\n\nSmacznego!\n\n");
         });
 

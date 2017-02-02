@@ -2,6 +2,7 @@ package exercises.xf.model;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -15,17 +16,17 @@ public class OrderTest {
     private static final Cuisine cuisine1 = new Cuisine("Polish");
     private static final Cuisine cuisine2 = new Cuisine("Portuguese");
 
-    private static final Supply mainCourse1 = new MainCourse("Bigos", 30.0, cuisine1);
-    private static final Supply mainCourse2 = new MainCourse("Bacalhau", 25.0, cuisine2);
+    private static final Supply mainCourse1 = new MainCourse("Bigos", new BigDecimal("30.0"), cuisine1);
+    private static final Supply mainCourse2 = new MainCourse("Bacalhau", new BigDecimal("25.0"), cuisine2);
 
-    private static final Supply dessert1 = new Dessert("Sernik", 10.0, cuisine1);
-    private static final Supply dessert2 = new Dessert("Pastel de Nata", 11.5, cuisine2);
+    private static final Supply dessert1 = new Dessert("Sernik", new BigDecimal("10.0"), cuisine1);
+    private static final Supply dessert2 = new Dessert("Pastel de Nata", new BigDecimal("11.5"), cuisine2);
 
     private static final Meal meal1 = new Meal(mainCourse1, dessert1);
     private static final Meal meal2 = new Meal(mainCourse2, dessert2);
 
-    private static final Drink drink1 = new Drink("Beer", 5.0, cuisine1);
-    private static final Drink drink2 = new Drink("Wine", 20.0, cuisine2);
+    private static final Drink drink1 = new Drink("Beer", new BigDecimal("5.0"), cuisine1);
+    private static final Drink drink2 = new Drink("Wine", new BigDecimal("20.0"), cuisine2);
 
     private static final Order order1 = new Order(newArrayList(meal1, drink1));
     private static final Order order2 = new Order(newArrayList(meal1, drink1));
@@ -52,18 +53,20 @@ public class OrderTest {
 
     @Test
     public void shouldGetNewOrder() throws Exception {
-        List<PricedItem> expectedMeals = newArrayList(
+        Cuisine polishCuisine = new Cuisine("Polish");
+        Cuisine italianCuisine = new Cuisine("Italian");
+        List<PricedItem> expectedItems = newArrayList(
                 new Meal(
-                        SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pierogi", 14.0, new Cuisine("Polish")),
-                        SupplyFactory.getNewSupply(SupplyType.DESSERT, "Churros", 9.0, new Cuisine("Mexican"))),
-                SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", 30.0, new Cuisine("Polish")),
+                        SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Pierogi", new BigDecimal("14.0"), polishCuisine),
+                        SupplyFactory.getNewSupply(SupplyType.DESSERT, "Naleśniki", new BigDecimal("12.0"), polishCuisine)),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", new BigDecimal("30.0"), polishCuisine),
                 new Meal(
-                        SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Burrito", 20.3, new Cuisine("Mexican")),
-                        SupplyFactory.getNewSupply(SupplyType.DESSERT, "Panna Cotta", 8.0, new Cuisine("Italian"))),
-                SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", 30.0, new Cuisine("Polish"))
+                        SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Minestrone", new BigDecimal("10.0"), italianCuisine),
+                        SupplyFactory.getNewSupply(SupplyType.DESSERT, "Panna Cotta", new BigDecimal("8.0"), italianCuisine)),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Juice", new BigDecimal("3.5"), null)
         );
-        Order created = new Order(expectedMeals);
-        assertThat(created.getItems()).as("Checking factory creation of an order").isEqualTo(expectedMeals);
+        Order created = new Order(expectedItems);
+        assertThat(created.getItems()).as("Checking factory creation of an order").isEqualTo(expectedItems);
     }
 
     @Test
@@ -76,5 +79,30 @@ public class OrderTest {
     public void shouldFailWithEmptyListOfItems() throws Exception {
         Throwable thrown = catchThrowable(() -> new Order(newArrayList()));
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class).hasMessage("Empty order.");
+    }
+
+    @Test
+    public void priceShouldBeSumOfAllItems() throws Exception {
+        Cuisine polishCuisine = new Cuisine("Polish");
+        Cuisine italianCuisine = new Cuisine("Italian");
+        BigDecimal price1 = new BigDecimal("29.99");
+        BigDecimal price2 = new BigDecimal("12.5");
+        BigDecimal price3 = new BigDecimal("30.0");
+        BigDecimal price4 = new BigDecimal("10.0");
+        BigDecimal price5 = new BigDecimal("8.0");
+        BigDecimal price6 = new BigDecimal("3.5");
+        BigDecimal expectedPrice = new BigDecimal("93.99");
+        List<PricedItem> items = newArrayList(
+                new Meal(
+                        SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Bigos", price1, polishCuisine),
+                        SupplyFactory.getNewSupply(SupplyType.DESSERT, "Naleśniki", price2, polishCuisine)),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Wódka", price3, polishCuisine),
+                new Meal(
+                        SupplyFactory.getNewSupply(SupplyType.MAIN_COURSE, "Minestrone", price4, italianCuisine),
+                        SupplyFactory.getNewSupply(SupplyType.DESSERT, "Panna Cotta", price5, italianCuisine)),
+                SupplyFactory.getNewSupply(SupplyType.DRINK, "Juice", price6, null)
+        );
+        Order order = new Order(items);
+        assertThat(order.getPrice()).as("Checking price of meal").isEqualTo(expectedPrice);
     }
 }

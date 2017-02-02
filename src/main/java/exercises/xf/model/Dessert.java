@@ -1,11 +1,13 @@
 package exercises.xf.model;
 
+import java.math.BigDecimal;
+
 /**
  * Created by guisil on 31/01/2017.
  */
 public class Dessert extends Supply {
 
-    Dessert(String name, double price, Cuisine cuisine) {
+    Dessert(String name, BigDecimal price, Cuisine cuisine) {
         super(name, price, cuisine);
 
         if (cuisine == null) {

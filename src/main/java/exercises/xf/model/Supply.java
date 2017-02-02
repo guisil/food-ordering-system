@@ -1,5 +1,6 @@
 package exercises.xf.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -9,10 +10,10 @@ import java.util.Optional;
 public abstract class Supply implements PricedItem {
 
     private final String name;
-    private final double price;
+    private final BigDecimal price;
     private final Cuisine cuisine;
 
-    protected Supply(String name, double price, Cuisine cuisine) {
+    protected Supply(String name, BigDecimal price, Cuisine cuisine) {
 
         if (name == null) {
             throw new IllegalArgumentException("Illegal supply name.");
@@ -29,11 +30,11 @@ public abstract class Supply implements PricedItem {
     }
 
     @Override
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    Optional<Cuisine> getCuisine() {
+    public Optional<Cuisine> getCuisine() {
         return Optional.ofNullable(cuisine);
     }
 
@@ -48,7 +49,7 @@ public abstract class Supply implements PricedItem {
         }
         Supply other = (Supply) obj;
         return Objects.equals(other.name, name)
-                && other.price == price
+                && Objects.equals(other.price, price)
                 && Objects.equals(other.cuisine, cuisine);
     }
 
